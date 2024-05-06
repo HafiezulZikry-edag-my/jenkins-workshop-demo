@@ -2,8 +2,10 @@ pipeline {
 
     agent {
         kubernetes {
-            // Refer to the pod template file
-            yaml file: 'pod-template.yaml'
+            // Define podTemplate
+            inheritFrom 'wprs-be'
+            defaultContainer 'node'
+            yamlFile 'pod-template.yaml'
         }
     }
 
@@ -20,14 +22,17 @@ pipeline {
             }
         }
 
-        stage('Run tests') {
-            try {
-                steps {
-                    sh 'npm test'
+        stage('Test') {
+            steps {
+                echo 'Testing'
+                script {
+                    try {
+                        sh 'npm test'
+                    } catch (err) {
+                        echo 'Tests failed'
+                        throw err
+                    }
                 }
-            } catch (err) {
-                echo 'Tests failed'
-                currentBuild.result = 'FAILURE'
             }
         }
     }
