@@ -1,0 +1,18 @@
+version: '3'  # Specifies the version of the Docker Compose file format being used.
+
+services:  # Defines the services that compose your application.
+
+  jenkins:  # Service name for Jenkins.
+    image: jenkins/jenkins:lts  # Specifies the Docker image to use for the Jenkins service.
+    ports:  # Specifies port mappings for the service.
+      - "5050:8080"  # Maps port 8080 of the container to port 8080 on the host.
+    volumes:  # Specifies volume mappings for the service.
+      - jenkins_home:/var/jenkins_home  # Mounts a volume for Jenkins data persistence.
+    networks:  # Specifies networks to connect the service to.
+      - app-network  # Connects the Jenkins service to the "app-network" network.
+
+networks:  # Defines additional networks for the services.
+  app-network:  # Network name for the application.
+
+volumes:  # Defines named volumes to be used by the services.
+  jenkins_home:  # Volume name for Jenkins data persistence.
